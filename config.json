@@ -1,3 +1,4 @@
 {
-    "device_port": "COM3"
+    "device_port": "COM3",
+    "device_baudrate": 115200
 }

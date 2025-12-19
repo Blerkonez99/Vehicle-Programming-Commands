@@ -1,6 +1,6 @@
 # Key Programmer GUI
 
-A Python-based GUI application for programming car keys and bypassing immobilizers using the OBDLink SX interface.
+A Python-based GUI application for programming car keys and bypassing immobilizers using the OBDLink EX USB interface.
 
 
 ![Screenshot 2025-01-21 023532](https://github.com/user-attachments/assets/df118dbf-b7da-4abd-a1d1-cddf74bf1714)
@@ -184,6 +184,31 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+## Windows build script
+
+To bundle the app into a ready-to-run Windows executable, save the following
+contents as `build_windows.bat` in the repository root (a copy already exists
+in the repo) and double-click it:
+
+```bat
+@echo off
+setlocal enabledelayedexpansion
+
+cd /d "%~dp0"
+python --version >NUL 2>&1 || (echo Install Python 3.8+ first & exit /b 1)
+if not exist ".venv\Scripts\python.exe" python -m venv .venv
+call .venv\Scripts\activate.bat
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install pyinstaller
+pyinstaller --noconfirm --clean --name KeyProgrammer --noconsole ^
+    --add-data "src\database;src\database" ^
+    --add-data "config.json;." ^
+    src\main.py
+```
+
+When finished, the executable will be in `dist\KeyProgrammer\KeyProgrammer.exe`.
+
 ## Troubleshooting Installation
 
 If you encounter any installation issues:
@@ -210,7 +235,7 @@ If you encounter any installation issues:
 
 ## Usage
 
-1. Connect OBDLink SX device
+1. Connect OBDLink EX device via USB and ensure the correct COM port and baud rate (default 115200) are set in the application header
 2. Select vehicle manufacturer, model, and year
 3. Choose desired operation:
    - Add New Key
